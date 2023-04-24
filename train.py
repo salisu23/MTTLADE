@@ -241,6 +241,21 @@ def main():
                     key = 'bert.model.{}'.format(key)
                     new_state_dict[key] = val
             state_dict = {'state': new_state_dict}
+    elif encoder_type == EncoderModelType.ERNIE:
+        if os.path.exists("C:/Users/user/Downloads/snomed_model_conc"):
+            state_dict = torch.load("C:/Users/user/Downloads/snomed_model_conc/pytorch_model.bin")
+            config = state_dict['config']
+            config['attention_probs_dropout_prob'] = args.bert_dropout_p
+            config['hidden_dropout_prob'] = args.bert_dropout_p
+            config['multi_gpu_on'] = opt["multi_gpu_on"]
+            opt.update(config)
+        else:
+            logger.error('#' * 20)
+            logger.error('Could not find the init model!\n The parameters will be initialized randomly!')
+            logger.error('#' * 20)
+            config = BertConfig(vocab_size_or_config_json_file=30522).to_dict()
+            config['multi_gpu_on'] = opt["multi_gpu_on"]
+            opt.update(config)
 
     model = MTDNNModel(opt, state_dict=state_dict, num_train_step=num_all_batches)
     #if args.resume and args.model_ckpt:

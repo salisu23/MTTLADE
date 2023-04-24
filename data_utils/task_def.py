@@ -24,3 +24,4 @@ class EncoderModelType(IntEnum):
     BIOBERT = 4
     SCIBERT = 5
     BLUEBERT = 6
+    ERNIE   =7

@@ -23,6 +23,31 @@ python convert_tf_to_pt.py \
 
 rm -r "bert/"
 
+## ERNIE 
+cd  "pretrained_models"
+mkdir "ernie"
+wget https://ernie.bj.bcebos.com/ERNIE_Base_en_stable-2.0.0.tar.gz -O "ERNIE_Base_en_stable-2.0.0.tar.gz"
+gunzip ERNIE_Base_en_stable-2.0.0.tar.gz
+tar xvf ERNIE_Base_en_stable-2.0.0.tar
+rm "ERNIE_Base_en_stable-2.0.0.tar.gz"
+mv "ERNIE_Base_en_stable-2.0.0/vocab.txt" "ernie_vocab/vocab.txt"
+mv "ERNIE_Base_en_stable-2.0.0/bert_model.ckpt.meta" "ernie/bert_model.ckpt.meta"
+mv "ERNIE_Base_en_stable-2.0.0/bert_model.ckpt.data-00000-of-00001" "ernie/bert_model.ckpt.data-00000-of-00001"
+mv "ERNIE_Base_en_stable-2.0.0/bert_model.ckpt.index" "ernie/bert_model.ckpt.index"
+mv "ERNIE_Base_en_stable-2.0.0/bert_config.json" "ernie/bert_config.json"
+rm -r "ERNIE_Base_en_stable-2.0.0/"
+
+python convert_tf_to_pt.py \
+    -- tf-path-model "ernie_vocab/bert_model.ckpt" \
+    -- config-file "ernie_vocab/bert_config.json" \
+    -- model-type "ernie" \
+    -- pytorch-file "ernie.pt" \
+
+rm "ernie_vocab/bert_model.ckpt.meta"
+rm "ernie_vocab/bert_model.ckpt.data-00000-of-00001"
+rm "ernie_vocab/bert_model.ckpt.index"
+rm "ernie_vocab/bert_config.json"
+
 ## SCIBERT
 cd  "pretrained_models"
 mkdir "scibert_vocab"
